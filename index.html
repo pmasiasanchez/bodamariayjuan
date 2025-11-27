@@ -127,9 +127,9 @@
 <body>
     <div class="hero">
         <div class="hero-content">
-            <h1>María & Juan</h1>
+            <h1>Anne & Pablo</h1>
             <p>¡Nos casamos!</p>
-            <div class="fecha">15 de Junio, 2025</div>
+            <div class="fecha">30 de Junio, 2025</div>
         </div>
     </div>
 
@@ -137,18 +137,23 @@
         <h2>Información del Evento</h2>
         <div class="info-grid">
             <div class="info-card">
-                <h3>📅 Ceremonia</h3>
-                <p><strong>Fecha:</strong> 15 de Junio, 2025</p>
-                <p><strong>Hora:</strong> 17:00h</p>
-                <p><strong>Lugar:</strong> Iglesia San Pedro</p>
-                <p>Calle Mayor, 123</p>
+                <h3>💒 Ceremonia & Celebración</h3>
+                <p><strong>Fecha:</strong> 30 de Junio, 2025</p>
+                <p><strong>Hora:</strong> 12:00h</p>
+                <p><strong>Lugar:</strong> Palacio de los Sofraga</p>
+                <p>Ávila</p>
             </div>
 
             <div class="info-card">
-                <h3>🎉 Celebración</h3>
-                <p><strong>Hora:</strong> 19:00h</p>
-                <p><strong>Lugar:</strong> Finca Los Olivos</p>
-                <p>Carretera de la Sierra, Km 5</p>
+                <h3>📍 Cómo Llegar</h3>
+                <p><strong>Dirección:</strong></p>
+                <p>Palacio de los Sofraga</p>
+                <p>Ávila</p>
+                <p style="margin-top: 1rem;">
+                    <a href="https://maps.google.com/?q=Palacio+de+los+Sofraga+Ávila" target="_blank" style="color: #667eea; text-decoration: none;">
+                        🗺️ Ver en Google Maps
+                    </a>
+                </p>
             </div>
 
             <div class="info-card">
@@ -163,11 +168,62 @@
         <h2>Confirma tu Asistencia</h2>
         <div class="center">
             <p style="font-size: 1.2rem; margin-bottom: 2rem;">
-                Por favor, confírmanos tu asistencia antes del 1 de Mayo
+                Por favor, confírmanos tu asistencia antes del 1 de Abril
             </p>
-            <button class="confirmar-btn" onclick="confirmar()">
-                Confirmar Asistencia
-            </button>
+            
+            <form id="confirmacionForm" style="max-width: 600px; margin: 0 auto; text-align: left;">
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Nombre completo *</label>
+                    <input type="text" id="nombre" required style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">¿Confirmas tu asistencia? *</label>
+                    <select id="asistencia" required style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                        <option value="">Selecciona una opción</option>
+                        <option value="si">Sí, asistiré</option>
+                        <option value="no">No podré asistir</option>
+                        <option value="nolose">No lo sé todavía</option>
+                    </select>
+                </div>
+
+                <div id="detallesAsistencia" style="display: none;">
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">¿Qué día vienes? *</label>
+                        <select id="dia" style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                            <option value="">Selecciona una opción</option>
+                            <option value="viernes">Viernes</option>
+                            <option value="sabado">Sábado</option>
+                            <option value="ambos">Ambos días</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Alojamiento *</label>
+                        <select id="alojamiento" style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem;">
+                            <option value="">Selecciona una opción</option>
+                            <option value="reservado">Tengo sitio reservado</option>
+                            <option value="no-duermo">No me quedo a dormir</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; font-weight: bold;">Comentarios adicionales</label>
+                        <textarea id="comentarios" rows="4" style="width: 100%; padding: 0.8rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem;" placeholder="Alergias, necesidades especiales, etc."></textarea>
+                    </div>
+                </div>
+
+                <div style="text-align: center;">
+                    <button type="submit" class="confirmar-btn">
+                        Enviar Confirmación
+                    </button>
+                </div>
+            </form>
+
+            <div id="mensajeExito" style="display: none; margin-top: 2rem; padding: 1.5rem; background: #d4edda; border: 2px solid #28a745; border-radius: 5px; color: #155724;">
+                <strong>✓ ¡Confirmación enviada!</strong><br>
+                Gracias por confirmar tu asistencia.
+            </div>
         </div>
     </section>
 
@@ -186,14 +242,64 @@
     </section>
 
     <footer>
-        <p>&copy; 2025 María & Juan - ¡Os esperamos!</p>
+        <p>&copy; 2025 Anne & Pablo - ¡Os esperamos!</p>
     </footer>
 
     <script>
-        function confirmar() {
-            // Aquí puedes cambiar el email o usar un formulario de Google Forms
-            window.location.href = "mailto:tucorreo@ejemplo.com?subject=Confirmación de Asistencia a la Boda";
-        }
+        // Mostrar/ocultar detalles según asistencia
+        document.getElementById('asistencia').addEventListener('change', function() {
+            const detalles = document.getElementById('detallesAsistencia');
+            const dia = document.getElementById('dia');
+            const alojamiento = document.getElementById('alojamiento');
+            
+            if (this.value === 'si') {
+                detalles.style.display = 'block';
+                dia.required = true;
+                alojamiento.required = true;
+            } else {
+                detalles.style.display = 'none';
+                dia.required = false;
+                alojamiento.required = false;
+            }
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('confirmacionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const asistencia = document.getElementById('asistencia').value;
+            const dia = document.getElementById('dia').value;
+            const alojamiento = document.getElementById('alojamiento').value;
+            const comentarios = document.getElementById('comentarios').value;
+
+            // Construir el mensaje para el email
+            let mensaje = `Nombre: ${nombre}%0D%0A`;
+            
+            if (asistencia === 'si') {
+                mensaje += `Asistencia: Sí asistiré%0D%0A`;
+            } else if (asistencia === 'no') {
+                mensaje += `Asistencia: No podré asistir%0D%0A`;
+            } else {
+                mensaje += `Asistencia: No lo sé todavía%0D%0A`;
+            }
+            
+            if (asistencia === 'si') {
+                mensaje += `Día: ${dia}%0D%0A`;
+                mensaje += `Alojamiento: ${alojamiento}%0D%0A`;
+            }
+            
+            if (comentarios) {
+                mensaje += `Comentarios: ${comentarios}%0D%0A`;
+            }
+
+            // Abrir cliente de email (cambia tucorreo@ejemplo.com por tu email real)
+            window.location.href = `mailto:tucorreo@ejemplo.com?subject=Confirmación de Asistencia - ${nombre}&body=${mensaje}`;
+            
+            // Mostrar mensaje de éxito
+            document.getElementById('mensajeExito').style.display = 'block';
+            document.getElementById('confirmacionForm').style.display = 'none';
+        });
     </script>
 </body>
 </html>
