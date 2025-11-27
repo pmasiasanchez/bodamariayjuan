@@ -1,0 +1,218 @@
+/*
+  Web de boda — Anne & Pablo
+  Archivo: Web_Boda_Anne_y_Pablo.jsx
+  - Componente React exportado por defecto
+  - Usa TailwindCSS para estilos (asegúrate de tener Tailwind configurado)
+  - Reemplaza MAP_EMBED_SRC por el src del iframe de Google Maps de la localización
+  - Reemplaza FORMSPREE_ENDPOINT por tu endpoint de Formspree (o configura Netlify Forms / tu backend)
+
+  Instrucciones rápidas:
+  - Para desplegarlo en Netlify/Vercel: crea un proyecto React (CRA / Vite), añade Tailwind, copia este archivo y úsalo como la página App.
+  - Si queréis que las confirmaciones lleguen por e-mail sin backend, crear un form en Formspree y pegar su URL en FORMSPREE_ENDPOINT.
+*/
+
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+
+const MAP_EMBED_SRC = "REEMPLAZAR_CON_GOOGLE_MAPS_IFRAME_SRC"; // <--- sustituir
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/REEMPLAZAR"; // <--- sustituir
+
+export default function WeddingPage() {
+  const [form, setForm] = useState({ name: "", attending: "yes", guests: 0, notes: "" });
+  const [status, setStatus] = useState({ sending: false, sent: false, error: null });
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setForm((s) => ({ ...s, [name]: value }));
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus({ sending: true, sent: false, error: null });
+    try {
+      const payload = new FormData();
+      payload.append("name", form.name);
+      payload.append("attending", form.attending);
+      payload.append("guests", form.guests);
+      payload.append("notes", form.notes);
+
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: payload,
+        headers: { Accept: "application/json" },
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "No se pudo enviar. Comprueba el endpoint.");
+      }
+
+      setStatus({ sending: false, sent: true, error: null });
+      setForm({ name: "", attending: "yes", guests: 0, notes: "" });
+    } catch (err) {
+      setStatus({ sending: false, sent: false, error: err.message });
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900 antialiased">
+      <header className="max-w-3xl mx-auto px-6 py-12 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl sm:text-5xl font-serif tracking-tight"
+        >
+          Anne & Pablo
+        </motion.h1>
+        <p className="mt-3 text-gray-600">30 · 05 · 2026 — Ávila</p>
+        <div className="mt-8">
+          <a href="#rsvp" className="inline-block px-6 py-2 border border-gray-800 rounded-full text-sm font-medium hover:bg-gray-50">
+            Confirmar asistencia
+          </a>
+        </div>
+      </header>
+
+      <main className="max-w-4xl mx-auto px-6 pb-20">
+        {/* Nuestra historia - breve */}
+        <section className="mt-8 text-center">
+          <p className="text-gray-700 max-w-2xl mx-auto">Dos caminos se cruzaron por casualidad y ahora queremos celebrarlo con vosotros.</p>
+        </section>
+
+        {/* Cómo llegar */}
+        <section id="como-llegar" className="mt-14">
+          <h2 className="text-2xl font-semibold">Cómo llegar</h2>
+          <p className="mt-3 text-gray-600">Ceremonia y celebración en Ávila. Aquí tienes la ubicación y opciones de transporte.</p>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="rounded-xl overflow-hidden border">
+              {/* Replace MAP_EMBED_SRC with the Google Maps embed URL */}
+              <iframe
+                title="Mapa - Ávila"
+                src={MAP_EMBED_SRC}
+                className="w-full h-64"
+                loading="lazy"
+              ></iframe>
+            </div>
+
+            <div className="flex flex-col justify-between">
+              <div>
+                <h3 className="font-medium">Indicaciones rápidas</h3>
+                <ul className="mt-3 space-y-2 text-gray-700">
+                  <li>🚗 Parking disponible en las inmediaciones.</li>
+                  <li>🚆 La estación de tren de Ávila está a ~15 minutos en coche.</li>
+                  <li>🚕 Recomendamos coordinar taxis si venís con equipaje.</li>
+                </ul>
+              </div>
+
+              <div className="mt-6 text-sm text-gray-600">
+                <p><strong>Hora ceremonia:</strong> 12:00</p>
+                <p className="mt-1"><strong>Recepción:</strong> A continuación en el mismo lugar / cercano.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Información de interés / Alojamiento */}
+        <section id="info" className="mt-14">
+          <h2 className="text-2xl font-semibold">Información de interés & alojamiento</h2>
+          <p className="mt-3 text-gray-600">Hemos seleccionado algunas opciones de alojamiento cercanas para facilitar vuestra estancia.</p>
+
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="p-6 border rounded-xl">
+              <h3 className="font-medium">Hoteles recomendados</h3>
+              <ul className="mt-3 space-y-2 text-gray-700">
+                <li>
+                  <strong>Hotel A</strong><br />A 8 min del lugar · Tel: 900 000 000
+                </li>
+                <li>
+                  <strong>Hostal B</strong><br />Encanto rural · A 10 min en coche
+                </li>
+              </ul>
+            </div>
+
+            <div className="p-6 border rounded-xl">
+              <h3 className="font-medium">Transporte y recomendaciones</h3>
+              <ul className="mt-3 space-y-2 text-gray-700">
+                <li>Si necesitáis traslado, indicádnoslo en el formulario y valoraremos opciones compartidas.</li>
+                <li>Dress code: elegante — tonos neutros y cómodos.</li>
+                <li>Horario aproximado: ceremonia 12:00 → aperitivo → comida/fiesta.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* RSVP */}
+        <section id="rsvp" className="mt-14">
+          <h2 className="text-2xl font-semibold">Confirmar asistencia</h2>
+          <p className="mt-3 text-gray-600">Por favor, rellenad el formulario para confirmar vuestra asistencia. Si preferís, podéis escribirnos directamente por e-mail.</p>
+
+          <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-4 max-w-2xl">
+            <label className="block">
+              <span className="text-sm font-medium">Nombre y apellidos</span>
+              <input
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                required
+                className="mt-2 w-full rounded-md border px-3 py-2 focus:outline-none focus:ring"
+                placeholder="Ej: Ana Pérez"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium">¿Asistirás?</span>
+              <div className="mt-2 flex gap-4">
+                <label className="inline-flex items-center">
+                  <input type="radio" name="attending" value="yes" checked={form.attending === "yes"} onChange={handleChange} />
+                  <span className="ml-2">Sí</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input type="radio" name="attending" value="no" checked={form.attending === "no"} onChange={handleChange} />
+                  <span className="ml-2">No podré asistir</span>
+                </label>
+              </div>
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium">Acompañantes (número)</span>
+              <input
+                type="number"
+                min="0"
+                name="guests"
+                value={form.guests}
+                onChange={handleChange}
+                className="mt-2 w-32 rounded-md border px-3 py-2"
+              />
+            </label>
+
+            <label className="block">
+              <span className="text-sm font-medium">Restricciones alimentarias / comentarios</span>
+              <textarea name="notes" value={form.notes} onChange={handleChange} className="mt-2 w-full rounded-md border px-3 py-2" rows={4} />
+            </label>
+
+            <div>
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full border font-medium hover:bg-gray-50"
+                disabled={status.sending}
+              >
+                {status.sending ? "Enviando..." : "Enviar respuesta"}
+              </button>
+
+              {status.sent && <p className="mt-3 text-sm text-green-600">¡Gracias! Hemos recibido vuestra confirmación.</p>}
+              {status.error && <p className="mt-3 text-sm text-red-600">Error: {status.error}</p>}
+            </div>
+          </form>
+
+          <p className="mt-6 text-sm text-gray-500">Si preferís enviar la confirmación por e-mail: <a href="mailto:REEMPLAZAR_EMAIL" className="underline">REEMPLAZAR_EMAIL</a></p>
+        </section>
+
+        {/* Footer */}
+        <footer className="mt-20 text-center text-gray-600">
+          <p>Con todo nuestro cariño — Anne & Pablo · 30 de mayo de 2026</p>
+        </footer>
+      </main>
+    </div>
+  );
+}
